@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { ArrowRight } from "lucide-react"; // optional icon for CTA
 
-const Banner = () => {
+const HeroProducts = () => {
   return (
     <section className="relative  overflow-hidden">
 
@@ -77,50 +77,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
-
-
-// import { Button } from "@/components/ui/button";
-// import React from "react";
-
-// const Banner = () => {
-//   return (
-//     <section className="relative h-[70vh] md:h-[calc(100vh-80px)] w-full overflow-hidden">
-//       {/* Background Image */}
-//       <div
-//         className="absolute inset-0 bg-cover bg-top"
-//         style={{
-//           backgroundImage: "url(/icons/commonLayout/banner/banner.jpg)",
-//         }}
-//       />
-
-//       {/* Overlay */}
-//       <div className="absolute inset-0 bg-black/20" />
-
-//       {/* Bottom Gradient (like reference image) */}
-//       <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-white/90 via-white/70 to-transparent" />
-
-//       {/* Content */}
-//       <div className="relative z-10 flex h-full items-end justify-center pb-16 px-6">
-//         <div className="text-center max-w-3xl">
-//           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground">
-//             Professional Healthcare, When You Need It
-//           </h1>
-
-//           <p className="mt-4 text-muted-foreground text-base md:text-lg">
-//             24/7 urgent care, emergency response, home visits & hospital
-//             coordination
-//           </p>
-
-//           <div className="mt-8">
-//             <Button size="lg" className="rounded-full px-8">
-//               Request Care Now
-//             </Button>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default Banner;
+export default HeroProducts;

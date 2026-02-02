@@ -4,13 +4,13 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const  RegisterUser=()=> {
+const RegisterUser = () => {
   const [contactType, setContactType] = useState("telegram");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-white flex items-center justify-center">
-      <div className="w-full mx-auto grid md:grid-cols-2 gap-0 md:gap-12 lg:gap-16 px-6 py-12 md:p-12 lg:p-16">
-        
+    <div className="min-h-screen  flex items-center justify-center">
+      <div className="w-full mx-auto grid md:grid-cols-2 gap-0 md:gap-12 items-center lg:gap-16 px-6 py-12 md:p-12 lg:p-16">
+
         {/* LEFT SIDE - Marketing & Illustration */}
         <div className="hidden md:flex flex-col justify-center items-center text-center relative">
           {/* Logo */}
@@ -42,10 +42,6 @@ const  RegisterUser=()=> {
               className="w-full h-full object-cover"
             />
           </div>
-
-          <p className="mt-10 text-gray-600 text-lg">
-            5,000+ brands rely on Laaffic to power their Gaming marketing
-          </p>
         </div>
 
         {/* RIGHT SIDE - Signup Form */}
@@ -58,7 +54,8 @@ const  RegisterUser=()=> {
             </select>
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">SIGN UP</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">              Sign In
+          </h2>
 
           <form className="space-y-6 mt-8">
             {/* Username */}
@@ -132,24 +129,7 @@ const  RegisterUser=()=> {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Verification code
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="code"
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                  <button
-                    type="button"
-                    className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
-                  >
-                    Get verification code
-                  </button>
-                </div>
-              </div>
+
             </div>
 
             {/* Agreement */}
@@ -174,7 +154,7 @@ const  RegisterUser=()=> {
               type="submit"
               className="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-lg rounded-xl hover:from-pink-600 hover:to-purple-700 transition shadow-lg"
             >
-              SIGN UP
+              Sign In
             </button>
           </form>
 
@@ -191,4 +171,4 @@ const  RegisterUser=()=> {
     </div>
   );
 }
-export default  RegisterUser;
+export default RegisterUser;
