@@ -1,11 +1,20 @@
-// components/Header.tsx
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // shadcn sheet for mobile menu
-import Logo from "@/shared/Logo/Logo"; // your custom logo component
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import Logo from "@/shared/Logo/Logo";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -16,9 +25,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { Globe, Menu } from "lucide-react";
+import { Globe, Menu, ChevronDown } from "lucide-react";
 
-// ── ListItem (same as yours) ──
+/* ───────────────── ListItem ───────────────── */
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a"> & { title: string }
@@ -28,211 +37,343 @@ const ListItem = React.forwardRef<
       <a
         ref={ref}
         className={cn(
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
+          "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
           className
         )}
         {...props}
       >
         <div className="text-sm font-medium leading-none">{title}</div>
-        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-          {children}
-        </p>
+        {children && (
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        )}
       </a>
     </NavigationMenuLink>
   </li>
 ));
 ListItem.displayName = "ListItem";
 
-// ── Menu Items Data ──
-const productsItems = [
-  { title: "Marketing SMS", href: "/products/marketing-sms", description: "Bulk promotional messaging" },
-  { title: "Verification SMS", href: "/products/verification", description: "OTP & authentication codes" },
-  { title: "Voice", href: "/products/voice", description: "Voice calls & IVR solutions" },
+/* ───────────────── MENU DATA ───────────────── */
+
+const productsMenu = [
+  {
+    title: "Marketing SMS",
+    items: [
+      { title: "SMS", href: "/products/sms" },
+      { title: "RSM", href: "/products/rsm" },
+      { title: "MMS", href: "/products/mms" },
+      { title: "Two-way SMS", href: "/products/two-way-sms" },
+      { title: "WhatsApp", href: "/products/whatsapp" },
+    ],
+  },
+  {
+    title: "Voice",
+    items: [
+      { title: "Post-call SMS", href: "/products/post-call-sms" },
+      { title: "AI Group Call", href: "/products/ai-group-call" },
+      { title: "Group Call", href: "/products/group-call" },
+      { title: "Call Center", href: "/products/call-center" },
+      { title: "SIP Trunk", href: "/products/sip-trunk" },
+    ],
+  },
+  {
+    title: "Number",
+    items: [{ title: "DID Number", href: "/products/did-number" }],
+  },
+  {
+    title: "ADS",
+    href: "/products/voice",
+    isDirect: true,
+  },
 ];
 
-const solutionsItems = [
-  { title: "Healthcare Providers", href: "/solutions/healthcare", description: "Streamline patient communication" },
-  { title: "Emergency Services", href: "/solutions/emergency", description: "Fast response coordination" },
-  { title: "Home Care Agencies", href: "/solutions/home-care", description: "Schedule & notify caregivers" },
+const solutionsMenu = [
+  {
+    title: "Applications",
+    href: "/solutions/healthcare",
+    items: [
+      { title: "Verification", href: "/products/verification" },
+      { title: "Marketing", href: "/products/marketing" },
+      { title: "Service", href: "/products/service" },
+    ],
+  },
+  { title: "Industry", href: "/solutions/emergency" },
+  { title: "Service", href: "/solutions/home-care" },
 ];
 
-const partnersItems = [
-  { title: "Hospitals & Clinics", href: "/partners/hospitals", description: "Integrate with existing systems" },
-  { title: "Ambulance Services", href: "/partners/ambulance", description: "Real-time dispatch alerts" },
-  { title: "Insurance Partners", href: "/partners/insurance", description: "Claims & approval notifications" },
+const partnersMenu = [
+  { title: "Affiliate", href: "/partners/hospitals" },
+  { title: "Agent", href: "/partners/ambulance" },
 ];
 
-const resourcesItems = [
-  { title: "Blog & Insights", href: "/resources/blog", description: "Healthcare communication trends" },
-  { title: "Help Center", href: "/resources/help", description: "Guides, FAQs & support" },
-  { title: "API Documentation", href: "/resources/api", description: "Build custom integrations" },
+const resourcesMenu = [
+  { title: "Developers Docs", href: "/resources/blog" },
+  { title: "Quick Start", href: "/resources/help" },
+  { title: "Q&A", href: "/resources/api" },
 ];
 
-const aboutUsItems = [
-  { title: "Our Mission", href: "/about/mission", description: "24/7 accessible quality care" },
-  { title: "Our Team", href: "/about/team", description: "Meet the people behind the platform" },
-  { title: "Careers", href: "/about/careers", description: "Join our mission to improve healthcare" },
+const aboutMenu = [
+  { title: "Events", href: "/about/mission" },
+  { title: "Blog", href: "/about/team" },
+  { title: "Company", href: "/about/company" },
+  { title: "Careers", href: "/about/careers" },
 ];
 
-// ── Trigger Style ──
+/* ───────────────── TRIGGER STYLE ───────────────── */
 const triggerClass = cn(
-  "bg-transparent text-primary-foreground px-3 py-2 text-sm font-medium",
-  "hover:bg-primary/80 hover:text-primary-foreground",
-  "data-[state=open]:bg-primary/80 data-[state=open]:text-primary-foreground",
-  "focus:bg-primary/80 focus:text-primary-foreground"
+  "bg-transparent text-primary-foreground px-3 py-2 text-sm font-medium transition-colors",
+  "hover:bg-primary/80 data-[state=open]:bg-primary/80",
+  "data-[state=open]:shadow-sm"
 );
 
+/* ───────────────── HEADER ───────────────── */
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground shadow-sm">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between lg:h-20">
-          {/* Logo */}
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+
+          {/* LOGO */}
           <Link href="/" className="flex items-center">
             <Logo />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex flex-1 justify-center">
+          {/* DESKTOP NAV */}
+          <nav className="hidden lg:flex lg:gap-1">
             <NavigationMenu>
-              <NavigationMenuList className="gap-1 lg:gap-2 bg-transparent">
+              <NavigationMenuList>
+
+                {/* PRODUCTS – Mega Menu */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass}>Products</NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-primary border border-primary-foreground/20">
-                    <ul className="grid w-[400px] gap-3 p-4 lg:w-[500px]">
-                      {productsItems.map((item) => (
-                        <ListItem key={item.href} title={item.title} href={item.href}>
-                          {item.description}
-                        </ListItem>
-                      ))}
+                  <NavigationMenuTrigger className={triggerClass}>
+                    Products
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-[620px] p-6 lg:w-[700px]">
+                      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {productsMenu.map((section) =>
+                          section.isDirect ? (
+                            <ListItem
+                              key={section.href}
+                              title={section.title}
+                              href={section.href}
+                              className="md:col-span-2 lg:col-span-3 font-semibold"
+                            />
+                          ) : (
+                            <li key={section.title} className="row-span-3">
+                              <h4 className="mb-3 text-base font-semibold leading-none">
+                                {section.title}
+                              </h4>
+                              <ul className="space-y-2">
+                                {section.items.map((item) => (
+                                  <ListItem
+                                    key={item.href}
+                                    title={item.title}
+                                    href={item.href}
+                                  />
+                                ))}
+                              </ul>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                {/* SOLUTIONS */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className={triggerClass}>
+                    Solutions
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="w-[380px] p-5 grid gap-3">
+                      {solutionsMenu.map((item) =>
+                        item.items ? (
+                          <li key={item.href}>
+                            <div className="mb-1 font-medium">{item.title}</div>
+                            <ul className="ml-4 space-y-1.5 text-sm">
+                              {item.items.map((sub) => (
+                                <li key={sub.href}>
+                                  <NavigationMenuLink asChild>
+                                    <Link
+                                      href={sub.href}
+                                      className="text-muted-foreground hover:text-foreground transition"
+                                    >
+                                      {sub.title}
+                                    </Link>
+                                  </NavigationMenuLink>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ) : (
+                          <ListItem
+                            key={item.href}
+                            title={item.title}
+                            href={item.href}
+                          />
+                        )
+                      )}
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass}>Solutions</NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-primary border border-primary-foreground/20">
-                    <ul className="grid w-[400px] gap-3 p-4 lg:w-[500px]">
-                      {solutionsItems.map((item) => (
-                        <ListItem key={item.href} title={item.title} href={item.href}>
-                          {item.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                {/* PARTNERS - RESOURCES - ABOUT */}
+                {[
+                  { label: "Partners", items: partnersMenu },
+                  { label: "Resources", items: resourcesMenu },
+                  { label: "About Us", items: aboutMenu },
+                ].map(({ label, items }) => (
+                  <NavigationMenuItem key={label}>
+                    <NavigationMenuTrigger className={triggerClass}>
+                      {label}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="w-[360px] p-5 grid gap-3">
+                        {items.map((item) => (
+                          <ListItem
+                            key={item.href}
+                            title={item.title}
+                            href={item.href}
+                          />
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                ))}
 
+                {/* CONTACT – direct link */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass}>Partners</NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-primary border border-primary-foreground/20">
-                    <ul className="grid w-[400px] gap-3 p-4 lg:w-[500px]">
-                      {partnersItems.map((item) => (
-                        <ListItem key={item.href} title={item.title} href={item.href}>
-                          {item.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass}>Resources</NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-primary border border-primary-foreground/20">
-                    <ul className="grid w-[400px] gap-3 p-4 lg:w-[500px]">
-                      {resourcesItems.map((item) => (
-                        <ListItem key={item.href} title={item.title} href={item.href}>
-                          {item.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass}>About Us</NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-primary border border-primary-foreground/20">
-                    <ul className="grid w-[400px] gap-3 p-4 lg:w-[500px]">
-                      {aboutUsItems.map((item) => (
-                        <ListItem key={item.href} title={item.title} href={item.href}>
-                          {item.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                {/* Contact Us - simple link */}
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), triggerClass)}>
-                    <Link href="/contact">Contact Us</Link>
+                  <NavigationMenuLink asChild className={triggerClass}>
+                    <Link href="/contact" className={navigationMenuTriggerStyle()}>
+                      Contact
+                    </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
+
               </NavigationMenuList>
             </NavigationMenu>
           </nav>
 
-          {/* Right Side - Desktop */}
-          <div className="hidden lg:flex items-center gap-6">
-            <Button variant="ghost" size="sm" className="gap-1 text-primary-foreground hover:bg-primary/80">
+          {/* RIGHT SIDE – Desktop */}
+          <div className="hidden lg:flex items-center gap-4">
+            <Button variant="ghost" size="sm" className="gap-1.5">
               <Globe className="h-4 w-4" />
               English
             </Button>
 
-            <Link href="/login" className="text-sm font-medium hover:underline">
-              Log In
-            </Link>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/login">Log In</Link>
+            </Button>
 
-            <Button
-              asChild
-              className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-semibold px-6 py-5 rounded-full shadow-md"
-            >
+            <Button asChild className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white rounded-full px-6">
               <Link href="/signup">Free Trial</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu Trigger */}
+          {/* MOBILE MENU */}
           <Sheet>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-primary-foreground">
+              <Button variant="ghost" size="icon">
                 <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-primary text-primary-foreground border-l-primary-foreground/20">
-              <div className="flex flex-col gap-6 py-8">
-                <Link href="/" className="flex items-center">
+            <SheetContent
+              side="right"
+              className="w-full bg-primary text-primary-foreground border-l-primary-foreground/10 p-0"
+            >
+              <div className="flex flex-col h-full">
+                <div className="p-6 border-b border-primary-foreground/10">
                   <Logo />
-                </Link>
+                </div>
 
-                {/* Mobile Nav Links */}
-                <nav className="flex flex-col gap-4">
-                  <Link href="/products" className="text-lg font-medium hover:underline">Products</Link>
-                  <Link href="/solutions" className="text-lg font-medium hover:underline">Solutions</Link>
-                  <Link href="/partners" className="text-lg font-medium hover:underline">Partners</Link>
-                  <Link href="/resources" className="text-lg font-medium hover:underline">Resources</Link>
-                  <Link href="/about" className="text-lg font-medium hover:underline">About Us</Link>
-                  <Link href="/contact" className="text-lg font-medium hover:underline">Contact Us</Link>
-                </nav>
+                <div className="flex-1 overflow-y-auto p-6">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="products">
+                      <AccordionTrigger className="py-4 text-lg font-medium">
+                        Products
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="pl-4 space-y-6">
+                          {productsMenu.map((group) => (
+                            <div key={group.title}>
+                              <div className="font-medium mb-2">{group.title}</div>
+                              <ul className="space-y-2">
+                                {group.items?.map((item) => (
+                                  <li key={item.href}>
+                                    <Link
+                                      href={item.href}
+                                      className="block py-1.5 text-muted hover:text-foreground transition"
+                                    >
+                                      {item.title}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-                {/* Mobile Right Actions */}
-                <div className="flex flex-col gap-4 mt-auto">
-                  <Button variant="outline" className="justify-start gap-2 border-primary-foreground/30">
-                    <Globe className="h-5 w-5" />
-                    English
-                  </Button>
-                  <Link href="/login" className="text-center text-lg hover:underline">
-                    Log In
-                  </Link>
-                  <Button
-                    asChild
-                    className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-semibold"
-                  >
-                    <Link href="/signup">Free Trial</Link>
-                  </Button>
+                    {[
+                      { label: "Solutions", items: solutionsMenu },
+                      { label: "Partners", items: partnersMenu },
+                      { label: "Resources", items: resourcesMenu },
+                      { label: "About Us", items: aboutMenu },
+                    ].map(({ label, items }) => (
+                      <AccordionItem key={label} value={label.toLowerCase()}>
+                        <AccordionTrigger className="py-4 text-lg font-medium">
+                          {label}
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <ul className="pl-4 space-y-3">
+                            {items.map((item) => (
+                              <li key={item.href}>
+                                <Link
+                                  href={item.href}
+                                  className="block py-1.5 text-muted hover:text-foreground transition"
+                                >
+                                  {item.title}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+
+                    <div className="py-4">
+                      <Link
+                        href="/contact"
+                        className="block py-4 text-lg font-medium hover:text-accent transition"
+                      >
+                        Contact
+                      </Link>
+                    </div>
+                  </Accordion>
+                </div>
+
+                {/* Mobile bottom actions */}
+                <div className="p-6 border-t border-primary-foreground/10 mt-auto">
+                  <div className="flex flex-col gap-4">
+                    <Button variant="outline" className="justify-start gap-2" asChild>
+                      <Link href="/login">
+                        Log In
+                      </Link>
+                    </Button>
+                    <Button className="bg-fuchsia-600 hover:bg-fuchsia-700" asChild>
+                      <Link href="/signup">Start Free Trial</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </SheetContent>
           </Sheet>
+
         </div>
       </div>
     </header>

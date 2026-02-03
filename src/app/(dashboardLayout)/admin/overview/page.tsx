@@ -5,7 +5,7 @@ import { DashboardSkeleton } from "@/Skeleton/DashboardSkeleton";
 import { Suspense } from "react";
 
 
-async function UsersDashboardContent() {
+async function AdminDashboardContent() {
     return (
         <div className="space-y-10">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -42,7 +42,7 @@ async function UsersDashboardContent() {
 
 }
 
-const UsersDashboardPage = () => {
+const AdminDashboardPage = () => {
     return (
         <div className="space-y-6">
             <div>
@@ -50,10 +50,10 @@ const UsersDashboardPage = () => {
             </div>
 
             <Suspense fallback={<DashboardSkeleton />}>
-                <UsersDashboardContent />
+                <AdminDashboardContent />
             </Suspense>
         </div>
     );
 };
 
-export default UsersDashboardPage;
+export default AdminDashboardPage;

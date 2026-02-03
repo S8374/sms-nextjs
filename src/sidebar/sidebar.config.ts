@@ -1,13 +1,8 @@
 // @/config/sidebar.config.ts
-import { SidebarSection } from "@/types/sidebar.types";
+import { SidebarItem, SidebarSection } from "@/types/sidebar.types";
 import {
   LayoutDashboard,
-  Pill,
-  Activity,
   FileText,
-  User,
-  Contact,
-  BanknoteArrowUp,
   MessageCircle,
   Phone,
   Shield,
@@ -24,7 +19,7 @@ import {
 export const SIDEBAR_CONFIG: SidebarSection[] = [
   {
     title: "Admin Panel",
-    roles: ["USER"],
+    roles: ["ADMIN"],
     items: [
       {
         title: "Dashboard",
@@ -84,6 +79,44 @@ export const SIDEBAR_CONFIG: SidebarSection[] = [
         ],
       },
     ],
+  }
+  ,
+  {
+    title: "User Panel",
+    roles: ["USERS"],
+    items: [
+      {
+        title: "Dashboard",
+        url: "/user/overview",
+        icon: LayoutDashboard,
+      },
+      {
+        title: "Phonebook",
+        icon: Phone,
+        items: [
+          { title: "Contacts", url: "/user/phonebook/contacts", icon: Users },
+          { title: "Groups", url: "/user/phonebook/groups", icon: Users },
+        ],
+      },
+      {
+        title: "Reports",
+        icon: BarChart3,
+        items: [
+          { title: "Usage", url: "/user/reports/usage", icon: Zap },
+          { title: "Delivery", url: "/user/reports/delivery", icon: Mail },
+          { title: "Errors", url: "/user/reports/errors", icon: Shield },
+        ],
+      },
+      {
+        title: "Developer / API",
+        icon: Code,
+        items: [
+          { title: "API Keys", url: "/user/api/keys", icon: Key },
+          { title: "Webhooks", url: "/user/api/webhooks", icon: Zap },
+          { title: "Documentation", url: "/user/api/docs", icon: FileText },
+        ],
+      },
+    ]
   }
 ];
 

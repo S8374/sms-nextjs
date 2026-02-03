@@ -1,10 +1,10 @@
 // @/types/sidebar.types.ts
-import { ReactNode } from "react";
+import { LucideIcon } from "lucide-react";
 
 export interface SidebarItem {
   title: string;
   url?: string;
-  icon: ReactNode; // Lucide icon component
+   icon?: LucideIcon;   // ✅ FIX HER; // Lucide icon component
   items?: SidebarItem[]; // nested items → makes it a dropdown
   disabled?: boolean;
 }
